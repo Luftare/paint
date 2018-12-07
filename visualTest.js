@@ -83,25 +83,7 @@ const tests = [
     },
   },
   {
-    description: 'Angle + anchor',
-    arguments: [
-      {
-        ...center,
-        anchor: {
-          x: 0.5,
-          y: 0.5,
-        },
-        angle: Math.PI * 0.25,
-        image,
-      },
-    ],
-    run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.draw(...this.arguments);
-    },
-  },
-  {
-    description: 'Angle + anchor + scale',
+    description: 'Angle + anchor + scale + alpha',
     arguments: [
       {
         ...center,
@@ -111,6 +93,7 @@ const tests = [
         },
         angle: Math.PI * 0.25,
         scale: 2,
+        alpha: 0.5,
         image,
       },
     ],
