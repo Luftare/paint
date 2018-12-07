@@ -19,7 +19,35 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas.getContext('2d'));
+      const ctx = new Ctx(canvas);
+      ctx.draw(...this.arguments);
+    },
+  },
+  {
+    description: 'Alpha',
+    arguments: [
+      {
+        ...center,
+        image,
+        alpha: 0.5,
+      },
+    ],
+    run(canvas) {
+      const ctx = new Ctx(canvas);
+      ctx.draw(...this.arguments);
+    },
+  },
+  {
+    description: 'Scale',
+    arguments: [
+      {
+        ...center,
+        image,
+        scale: 2,
+      },
+    ],
+    run(canvas) {
+      const ctx = new Ctx(canvas);
       ctx.draw(...this.arguments);
     },
   },
@@ -36,7 +64,7 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas.getContext('2d'));
+      const ctx = new Ctx(canvas);
       ctx.draw(...this.arguments);
     },
   },
@@ -45,12 +73,12 @@ const tests = [
     arguments: [
       {
         ...center,
-        angle: Math.PI * 0.3,
+        angle: Math.PI * 0.25,
         image,
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas.getContext('2d'));
+      const ctx = new Ctx(canvas);
       ctx.draw(...this.arguments);
     },
   },
@@ -63,12 +91,31 @@ const tests = [
           x: 0.5,
           y: 0.5,
         },
-        angle: Math.PI * 0.3,
+        angle: Math.PI * 0.25,
         image,
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas.getContext('2d'));
+      const ctx = new Ctx(canvas);
+      ctx.draw(...this.arguments);
+    },
+  },
+  {
+    description: 'Angle + anchor + scale',
+    arguments: [
+      {
+        ...center,
+        anchor: {
+          x: 0.5,
+          y: 0.5,
+        },
+        angle: Math.PI * 0.25,
+        scale: 2,
+        image,
+      },
+    ],
+    run(canvas) {
+      const ctx = new Ctx(canvas);
       ctx.draw(...this.arguments);
     },
   },
