@@ -126,4 +126,22 @@ const tests = [
       ctx.rect(...this.arguments);
     },
   },
+  {
+    description: 'rect + stroke + angle',
+    arguments: [
+      {
+        ...center,
+        width: 100,
+        height: 50,
+        stroke: 'black',
+        lineWidth: 5,
+        angle: Math.PI * 0.3,
+        anchor: { x: 0.5, y: 0.5 },
+      },
+    ],
+    run(canvas) {
+      const ctx = new Ctx(canvas);
+      ctx.rect(...this.arguments);
+    },
+  },
 ];
