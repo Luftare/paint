@@ -145,4 +145,44 @@ const tests = [
       ctx.rect(...this.arguments);
     },
   },
+  {
+    description: 'line + stroke',
+    arguments: [
+      {
+        points: [
+          { x: 10, y: 10 },
+          { x: 200, y: 200 },
+          { x: 40, y: 140 },
+          { x: 160, y: 70 },
+        ],
+        stroke: 'black',
+        lineWidth: 3,
+      },
+    ],
+    run(canvas) {
+      const ctx = new Ctx(canvas);
+      ctx.line(...this.arguments);
+    },
+  },
+  {
+    description: 'line + stroke + fill + close path',
+    arguments: [
+      {
+        points: [
+          { x: 10, y: 10 },
+          { x: 200, y: 200 },
+          { x: 40, y: 140 },
+          { x: 160, y: 70 },
+        ],
+        stroke: 'black',
+        closePath: true,
+        fill: 'red',
+        lineWidth: 5,
+      },
+    ],
+    run(canvas) {
+      const ctx = new Ctx(canvas);
+      ctx.line(...this.arguments);
+    },
+  },
 ];

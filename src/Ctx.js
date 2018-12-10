@@ -10,10 +10,35 @@ class Ctx {
 
     ctx.save();
     this.applyAlpha(props);
-
     this.applyRotation(props);
 
     ctx.rect(...this.getRectComputedPosition(props), width, height);
+
+    this.paintShape(props);
+
+    ctx.restore();
+  }
+
+  line(props) {
+    const { ctx } = this;
+    const { points, closePath } = props;
+
+    ctx.save();
+    this.applyAlpha(props);
+    this.applyRotation(props);
+
+    points.forEach(({ x, y }, index) => {
+      if (index === 0) {
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+      } else {
+        ctx.lineTo(x, y);
+      }
+    });
+
+    if (closePath) {
+      ctx.closePath();
+    }
 
     this.paintShape(props);
 
@@ -42,7 +67,6 @@ class Ctx {
 
     ctx.save();
     this.applyAlpha(props);
-
     this.applyRotation(props);
 
     ctx.drawImage(
