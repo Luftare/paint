@@ -6,30 +6,47 @@ class Ctx {
 
   draw(props) {
     const { ctx } = this;
-    const {
-      x,
-      y,
-      anchor = this.defaultAnchor,
-      image,
-      angle = 0,
-      scale = 1,
-      alpha = 1,
-    } = props;
-
-    const center = [x, y];
+    const { image } = props;
 
     ctx.save();
-    ctx.globalAlpha = alpha;
-    ctx.translate(...center.map(val => val));
-    ctx.rotate(angle);
-    ctx.translate(...center.map(val => -val));
+    this.applyAlpha(props);
+
+    this.applyRotation(props);
+
     ctx.drawImage(
       image,
-      x - scale * image.width * anchor.x,
-      y - scale * image.height * anchor.y,
-      image.width * scale,
-      image.height * scale
+      ...this.getImageComputedPosition(props),
+      ...this.getImageComputedDimensions(props)
     );
     ctx.restore();
+  }
+
+  applyAlpha({ alpha }) {
+    this.ctx.globalAlpha = alpha;
+  }
+
+  getImageComputedPosition({
+    x,
+    y,
+    image,
+    anchor = this.defaultAnchor,
+    scale = 1,
+  }) {
+    return [
+      x - scale * image.width * anchor.x,
+      y - scale * image.height * anchor.y,
+    ];
+  }
+
+  getImageComputedDimensions({ image, scale = 1 }) {
+    return [image.width * scale, image.height * scale];
+  }
+
+  applyRotation({ x, y, angle = 0 }) {
+    const { ctx } = this;
+
+    ctx.translate(x, y);
+    ctx.rotate(angle);
+    ctx.translate(-x, -y);
   }
 }

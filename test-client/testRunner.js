@@ -44,7 +44,7 @@ function getImagesMatchData(dataUrlA, dataUrlB) {
       .ignoreColors()
       .onComplete(function(data) {
         resolve({
-          doMatch: data.rawMisMatchPercentage < 0.1,
+          doMatch: data.rawMisMatchPercentage < 0.5,
           diffImageUrl: data.getImageDataUrl(),
         });
       });
@@ -53,6 +53,7 @@ function getImagesMatchData(dataUrlA, dataUrlB) {
 
 function runAllTests() {
   testCases.innerHTML = '';
+  testRecaps.innerHTML = '';
 
   tests.forEach((test, testIndex) => {
     const testId = `test-${testIndex}`;
