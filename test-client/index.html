@@ -8,15 +8,15 @@
     margin: 8px;
     display: flex;
     flex-direction: column;
-    background-color: grey;
+    border: solid grey 4px;
   }
 
   .case--unchanged-snapshot {
-    background-color: lightgreen;
+    border: solid lightgreen 4px;
   }
 
   .case--changed-snapshot {
-    background-color: red;
+    border: solid red 4px;
   }
 
   .case__title {
@@ -26,5 +26,6 @@
 </style>
 <img class="test-image" src="test-image.png" hidden />
 <div class="test-cases"></div>
+<script src="resemble.js"></script>
 <script src="Ctx.js"></script>
 <script src="testRunner.js"></script>

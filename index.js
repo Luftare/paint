@@ -9,6 +9,7 @@ app.use(bodyParser.json());
 
 app.use('/', express.static(__dirname + '/test-client'));
 app.use('/', express.static(__dirname + '/src'));
+app.use('/', express.static(__dirname + '/node_modules/resemblejs'));
 
 app.get('/snapshots/:index', (req, res) => {
   const snapshotPath = `snapshots/${req.params.index}.txt`;

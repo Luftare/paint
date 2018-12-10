@@ -3,6 +3,8 @@ const image = document.querySelector('.test-image');
 const canvasSize = { x: 300, y: 300 };
 const center = { x: canvasSize.x / 2, y: canvasSize.y / 2 };
 
+resemble.outputSettings({ useCrossOrigin: false });
+
 window.addEventListener('load', runAllTests);
 
 function drawGrid(canvas) {
@@ -24,6 +26,17 @@ function updateTestSnapshot(testIndex, updatedImageDataUrl) {
         updatedImageDataUrl,
       }),
     }).then(resolve);
+  });
+}
+
+function imagesMatch(dataUrlA, dataUrlB) {
+  return new Promise(resolve => {
+    resemble(dataUrlA)
+      .compareTo(dataUrlB)
+      .ignoreColors()
+      .onComplete(function(data) {
+        resolve(data.rawMisMatchPercentage < 0.1);
+      });
   });
 }
 
@@ -130,41 +143,59 @@ function runAllTests() {
     const title = document.createElement('div');
     const container = document.createElement('div');
     const updateSnapshotButton = document.createElement('button');
+    const snapshotImage = document.createElement('img');
+    const snapshotTitle = document.createElement('div');
 
     container.classList.add('case');
     title.classList.add('case__title');
+    snapshotTitle.classList.add('case__snapshot-title');
     canvas.classList.add('case__canvas');
     updateSnapshotButton.classList.add('case__update-snapshot');
 
     canvas.width = canvasSize.x;
     canvas.height = canvasSize.y;
     title.innerHTML = test.description;
-    updateSnapshotButton.innerHTML = 'update';
+    updateSnapshotButton.innerHTML = 'update snapshot';
+    snapshotTitle.innerHTML = 'Snapshot';
+    updateSnapshotButton.hidden = true;
+    snapshotTitle.hidden = true;
 
     updateSnapshotButton.addEventListener('click', () => {
       updateTestSnapshot(testIndex, canvas.toDataURL()).then(runAllTests);
     });
 
+    container.appendChild(title);
+    container.appendChild(canvas);
+    container.appendChild(snapshotTitle);
+    container.appendChild(snapshotImage);
+    container.appendChild(updateSnapshotButton);
+    testCases.appendChild(container);
+
     drawGrid(canvas);
 
     test.run(canvas);
 
-    container.appendChild(title);
-    container.appendChild(updateSnapshotButton);
-    container.appendChild(canvas);
-    testCases.appendChild(container);
-
     fetch(`snapshots/${testIndex}`)
       .then(res => res.text())
       .then(snapshotImageDataUrl => {
-        if (!snapshotImageDataUrl) return;
-        const localImageDataUrl = canvas.toDataURL();
-        const snapshotsMatch = localImageDataUrl === snapshotImageDataUrl;
-        if (snapshotsMatch) {
-          container.classList.add('case--unchanged-snapshot');
-        } else {
-          container.classList.add('case--changed-snapshot');
+        if (!snapshotImageDataUrl) {
+          updateSnapshotButton.hidden = false;
+          updateSnapshotButton.innerHTML = 'add snapshot';
+          return;
         }
+        const localImageDataUrl = canvas.toDataURL();
+        imagesMatch(localImageDataUrl, snapshotImageDataUrl).then(
+          snapshotsMatch => {
+            if (snapshotsMatch) {
+              container.classList.add('case--unchanged-snapshot');
+            } else {
+              container.classList.add('case--changed-snapshot');
+              snapshotTitle.hidden = false;
+              updateSnapshotButton.hidden = false;
+              snapshotImage.src = snapshotImageDataUrl;
+            }
+          }
+        );
       });
   });
 }
