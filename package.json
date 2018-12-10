@@ -1,0 +1,28 @@
+{
+  "name": "ctx",
+  "version": "1.0.0",
+  "description": "😊 Ok, let's just rotate this image on the canvas.",
+  "main": "Ctx.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Luftare/ctx.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Luftare/ctx/issues"
+  },
+  "homepage": "https://github.com/Luftare/ctx#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.7"
+  }
+}

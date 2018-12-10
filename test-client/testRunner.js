@@ -3,10 +3,28 @@ const image = document.querySelector('.test-image');
 const canvasSize = { x: 300, y: 300 };
 const center = { x: canvasSize.x / 2, y: canvasSize.y / 2 };
 
+window.addEventListener('load', runAllTests);
+
 function drawGrid(canvas) {
   const ctx = canvas.getContext('2d');
   ctx.fillRect(center.x - 0.5, 0, 1, canvasSize.y);
   ctx.fillRect(0, center.y - 0.5, canvasSize.x, 1);
+}
+
+function updateTestSnapshot(testIndex, updatedImageDataUrl) {
+  return new Promise(resolve => {
+    fetch('snapshots', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        testIndex,
+        updatedImageDataUrl,
+      }),
+    }).then(resolve);
+  });
 }
 
 const tests = [
@@ -104,24 +122,49 @@ const tests = [
   },
 ];
 
-tests.forEach(test => {
-  const canvas = document.createElement('canvas');
-  const title = document.createElement('div');
-  const container = document.createElement('div');
+function runAllTests() {
+  testCases.innerHTML = '';
 
-  container.classList.add('case');
-  title.classList.add('case__title');
-  canvas.classList.add('case__canvas');
+  tests.forEach((test, testIndex) => {
+    const canvas = document.createElement('canvas');
+    const title = document.createElement('div');
+    const container = document.createElement('div');
+    const updateSnapshotButton = document.createElement('button');
 
-  canvas.width = canvasSize.x;
-  canvas.height = canvasSize.y;
-  title.innerHTML = test.description;
+    container.classList.add('case');
+    title.classList.add('case__title');
+    canvas.classList.add('case__canvas');
+    updateSnapshotButton.classList.add('case__update-snapshot');
 
-  drawGrid(canvas);
+    canvas.width = canvasSize.x;
+    canvas.height = canvasSize.y;
+    title.innerHTML = test.description;
+    updateSnapshotButton.innerHTML = 'update';
 
-  test.run(canvas);
+    updateSnapshotButton.addEventListener('click', () => {
+      updateTestSnapshot(testIndex, canvas.toDataURL()).then(runAllTests);
+    });
 
-  container.appendChild(title);
-  container.appendChild(canvas);
-  testCases.appendChild(container);
-});
+    drawGrid(canvas);
+
+    test.run(canvas);
+
+    container.appendChild(title);
+    container.appendChild(updateSnapshotButton);
+    container.appendChild(canvas);
+    testCases.appendChild(container);
+
+    fetch(`snapshots/${testIndex}`)
+      .then(res => res.text())
+      .then(snapshotImageDataUrl => {
+        if (!snapshotImageDataUrl) return;
+        const localImageDataUrl = canvas.toDataURL();
+        const snapshotsMatch = localImageDataUrl === snapshotImageDataUrl;
+        if (snapshotsMatch) {
+          container.classList.add('case--unchanged-snapshot');
+        } else {
+          container.classList.add('case--changed-snapshot');
+        }
+      });
+  });
+}

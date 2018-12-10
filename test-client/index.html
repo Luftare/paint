@@ -8,6 +8,15 @@
     margin: 8px;
     display: flex;
     flex-direction: column;
+    background-color: grey;
+  }
+
+  .case--unchanged-snapshot {
+    background-color: lightgreen;
+  }
+
+  .case--changed-snapshot {
+    background-color: red;
   }
 
   .case__title {
@@ -16,10 +25,9 @@
   }
 
   .case__canvas {
-    background-color: #eee;
   }
 </style>
 <img class="test-image" src="test-image.png" hidden />
 <div class="test-cases"></div>
 <script src="Ctx.js"></script>
-<script src="visualTest.js"></script>
+<script src="testRunner.js"></script>
