@@ -19,6 +19,20 @@ class Ctx {
     ctx.restore();
   }
 
+  circle(props) {
+    const { ctx } = this;
+    const { x, y, radius } = props;
+
+    ctx.save();
+    this.applyAlpha(props);
+
+    ctx.arc(x, y, radius, 0, Math.PI * 2);
+
+    this.paintShape(props);
+
+    ctx.restore();
+  }
+
   path(props) {
     const { ctx } = this;
     const { points, closePath } = props;

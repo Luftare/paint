@@ -185,4 +185,20 @@ const tests = [
       ctx.path(...this.arguments);
     },
   },
+  {
+    description: 'circle',
+    arguments: [
+      {
+        ...center,
+        radius: 55,
+        stroke: 'black',
+        fill: 'red',
+        lineWidth: 5,
+      },
+    ],
+    run(canvas) {
+      const ctx = new Ctx(canvas);
+      ctx.circle(...this.arguments);
+    },
+  },
 ];
