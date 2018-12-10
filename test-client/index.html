@@ -5,27 +5,84 @@
   }
 
   .case {
-    margin: 8px;
+    margin-top: 8px;
+    font-size: 16px;
     display: flex;
-    flex-direction: column;
-    border: solid grey 4px;
+    border-left: solid grey 20px;
+    padding: 16px;
+    box-sizing: border-box;
   }
 
   .case--unchanged-snapshot {
-    border: solid lightgreen 4px;
+    border-left: solid lightgreen 20px;
   }
 
   .case--changed-snapshot {
-    border: solid red 4px;
+    border-left: solid red 20px;
+  }
+
+  .case__overview {
+    display: block;
+    width: 300px;
   }
 
   .case__title {
-    font-size: 16px;
     margin-bottom: 8px;
+  }
+
+  .case__canvas {
+    margin-right: 40px;
+    border: solid 2px black;
+  }
+
+  .case__snapshot-title {
+    margin-bottom: 8px;
+  }
+
+  .case__snapshot {
+    border: solid 2px black;
+    margin-right: 40px;
+  }
+
+  .case__snapshot-diff {
+    border: solid 2px black;
+  }
+
+  .case__snapshot--missing {
+    background-color: lightgrey;
+  }
+
+  .test-recaps {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .test-recap {
+    align-self: flex-start;
+    margin-top: 4px;
+    color: black;
+    font-size: 16px;
+    padding: 8px;
+    padding-left: 16px;
+    border-left: solid grey 20px;
+  }
+
+  .test-recap--fail {
+    border-left: solid red 20px;
+    color: red;
+  }
+
+  .test-recap--success {
+    color: green;
+    border-left: solid lightgreen 20px;
   }
 </style>
 <img class="test-image" src="test-image.png" hidden />
+<h2>Summary</h2>
+<div class="test-recaps"></div>
+<h2>Details</h2>
 <div class="test-cases"></div>
 <script src="resemble.js"></script>
 <script src="Ctx.js"></script>
+<script src="tests.js"></script>
 <script src="testRunner.js"></script>

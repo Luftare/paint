@@ -1,9 +1,17 @@
 const testCases = document.querySelector('.test-cases');
-const image = document.querySelector('.test-image');
-const canvasSize = { x: 300, y: 300 };
-const center = { x: canvasSize.x / 2, y: canvasSize.y / 2 };
+const testRecaps = document.querySelector('.test-recaps');
 
-resemble.outputSettings({ useCrossOrigin: false });
+resemble.outputSettings({
+  errorColor: {
+    red: 255,
+    green: 0,
+    blue: 0,
+  },
+  errorType: 'movement',
+  transparency: 1,
+  useCrossOrigin: false,
+  outputDiff: true,
+});
 
 window.addEventListener('load', runAllTests);
 
@@ -29,147 +37,72 @@ function updateTestSnapshot(testIndex, updatedImageDataUrl) {
   });
 }
 
-function imagesMatch(dataUrlA, dataUrlB) {
+function getImagesMatchData(dataUrlA, dataUrlB) {
   return new Promise(resolve => {
     resemble(dataUrlA)
       .compareTo(dataUrlB)
       .ignoreColors()
       .onComplete(function(data) {
-        resolve(data.rawMisMatchPercentage < 0.1);
+        resolve({
+          doMatch: data.rawMisMatchPercentage < 0.1,
+          diffImageUrl: data.getImageDataUrl(),
+        });
       });
   });
 }
-
-const tests = [
-  {
-    description: 'Image',
-    arguments: [
-      {
-        ...center,
-        image,
-      },
-    ],
-    run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.draw(...this.arguments);
-    },
-  },
-  {
-    description: 'Alpha',
-    arguments: [
-      {
-        ...center,
-        image,
-        alpha: 0.5,
-      },
-    ],
-    run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.draw(...this.arguments);
-    },
-  },
-  {
-    description: 'Scale',
-    arguments: [
-      {
-        ...center,
-        image,
-        scale: 2,
-      },
-    ],
-    run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.draw(...this.arguments);
-    },
-  },
-  {
-    description: 'Anchor',
-    arguments: [
-      {
-        ...center,
-        anchor: {
-          x: 0.5,
-          y: 0.5,
-        },
-        image,
-      },
-    ],
-    run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.draw(...this.arguments);
-    },
-  },
-  {
-    description: 'Angle',
-    arguments: [
-      {
-        ...center,
-        angle: Math.PI * 0.25,
-        image,
-      },
-    ],
-    run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.draw(...this.arguments);
-    },
-  },
-  {
-    description: 'Angle + anchor + scale + alpha',
-    arguments: [
-      {
-        ...center,
-        anchor: {
-          x: 0.5,
-          y: 0.5,
-        },
-        angle: Math.PI * 0.25,
-        scale: 2,
-        alpha: 0.5,
-        image,
-      },
-    ],
-    run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.draw(...this.arguments);
-    },
-  },
-];
 
 function runAllTests() {
   testCases.innerHTML = '';
 
   tests.forEach((test, testIndex) => {
-    const canvas = document.createElement('canvas');
-    const title = document.createElement('div');
+    const testId = `test-${testIndex}`;
     const container = document.createElement('div');
-    const updateSnapshotButton = document.createElement('button');
-    const snapshotImage = document.createElement('img');
-    const snapshotTitle = document.createElement('div');
-
     container.classList.add('case');
-    title.classList.add('case__title');
-    snapshotTitle.classList.add('case__snapshot-title');
-    canvas.classList.add('case__canvas');
-    updateSnapshotButton.classList.add('case__update-snapshot');
+    container.id = testId;
+    container.innerHTML = `
+        <div class="case__overview">
+          <div class="case__title">#${testIndex}: ${test.description}</div>
+          <button class="case__update-snapshot" hidden>Update snapshot</button>
+        </div>
+        <div>
+          <div>Output</div>
+          <canvas class="case__canvas"></canvas>
+        </div>
+        <div>
+          <div>Snapshot</div>
+          <img class="case__snapshot" style="width: ${
+            canvasSize.x
+          }px; height: ${canvasSize.y}px;"/>
+        </div>
+        <div>
+          <div>Snapshot diff</div>
+          <img class="case__snapshot-diff" style="width: ${
+            canvasSize.x
+          }px; height: ${canvasSize.y}px;"/>
+        </div>
+    `;
+
+    const recap = document.createElement('a');
+    recap.href = `#${testId}`;
+    recap.classList.add('test-recap');
+    recap.innerHTML = `#${testIndex}: ${test.description}`;
+
+    testCases.appendChild(container);
+    testRecaps.appendChild(recap);
+
+    const canvas = container.querySelector('.case__canvas');
+    const updateSnapshotButton = container.querySelector(
+      '.case__update-snapshot'
+    );
+    const snapshot = container.querySelector('.case__snapshot');
+    const snapshotDiff = container.querySelector('.case__snapshot-diff');
 
     canvas.width = canvasSize.x;
     canvas.height = canvasSize.y;
-    title.innerHTML = test.description;
-    updateSnapshotButton.innerHTML = 'update snapshot';
-    snapshotTitle.innerHTML = 'Snapshot';
-    updateSnapshotButton.hidden = true;
-    snapshotTitle.hidden = true;
 
     updateSnapshotButton.addEventListener('click', () => {
       updateTestSnapshot(testIndex, canvas.toDataURL()).then(runAllTests);
     });
-
-    container.appendChild(title);
-    container.appendChild(canvas);
-    container.appendChild(snapshotTitle);
-    container.appendChild(snapshotImage);
-    container.appendChild(updateSnapshotButton);
-    testCases.appendChild(container);
 
     drawGrid(canvas);
 
@@ -180,19 +113,25 @@ function runAllTests() {
       .then(snapshotImageDataUrl => {
         if (!snapshotImageDataUrl) {
           updateSnapshotButton.hidden = false;
-          updateSnapshotButton.innerHTML = 'add snapshot';
-          return;
+          updateSnapshotButton.innerHTML = 'Add snapshot';
+          snapshot.classList.add('case__snapshot--missing');
+          testRecaps.return;
         }
+
+        snapshot.src = snapshotImageDataUrl;
+
         const localImageDataUrl = canvas.toDataURL();
-        imagesMatch(localImageDataUrl, snapshotImageDataUrl).then(
-          snapshotsMatch => {
-            if (snapshotsMatch) {
+
+        getImagesMatchData(localImageDataUrl, snapshotImageDataUrl).then(
+          ({ doMatch, diffImageUrl }) => {
+            snapshotDiff.src = diffImageUrl;
+            if (doMatch) {
               container.classList.add('case--unchanged-snapshot');
+              recap.classList.add('test-recap--success');
             } else {
               container.classList.add('case--changed-snapshot');
-              snapshotTitle.hidden = false;
+              recap.classList.add('test-recap--fail');
               updateSnapshotButton.hidden = false;
-              snapshotImage.src = snapshotImageDataUrl;
             }
           }
         );
