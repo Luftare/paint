@@ -146,7 +146,7 @@ const tests = [
     },
   },
   {
-    description: 'line + stroke',
+    description: 'path + stroke',
     arguments: [
       {
         points: [
@@ -161,11 +161,11 @@ const tests = [
     ],
     run(canvas) {
       const ctx = new Ctx(canvas);
-      ctx.line(...this.arguments);
+      ctx.path(...this.arguments);
     },
   },
   {
-    description: 'line + stroke + fill + close path',
+    description: 'path + stroke + fill + close path',
     arguments: [
       {
         points: [
@@ -182,7 +182,7 @@ const tests = [
     ],
     run(canvas) {
       const ctx = new Ctx(canvas);
-      ctx.line(...this.arguments);
+      ctx.path(...this.arguments);
     },
   },
 ];

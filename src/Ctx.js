@@ -19,7 +19,7 @@ class Ctx {
     ctx.restore();
   }
 
-  line(props) {
+  path(props) {
     const { ctx } = this;
     const { points, closePath } = props;
 
