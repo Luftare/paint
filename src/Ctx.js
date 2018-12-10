@@ -130,3 +130,7 @@ class Ctx {
     ctx.translate(-x, -y);
   }
 }
+
+try {
+  module.exports = Ctx;
+} catch (e) {}
