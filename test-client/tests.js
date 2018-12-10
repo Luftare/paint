@@ -127,13 +127,14 @@ const tests = [
     },
   },
   {
-    description: 'rect + stroke + angle',
+    description: 'rect + stroke + fill + angle',
     arguments: [
       {
         ...center,
         width: 100,
         height: 50,
         stroke: 'black',
+        fill: 'green',
         lineWidth: 5,
         angle: Math.PI * 0.3,
         anchor: { x: 0.5, y: 0.5 },
