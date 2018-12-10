@@ -95,4 +95,35 @@ const tests = [
       ctx.draw(...this.arguments);
     },
   },
+  {
+    description: 'rect + fill',
+    arguments: [
+      {
+        ...center,
+        width: 100,
+        height: 50,
+        fill: 'black',
+      },
+    ],
+    run(canvas) {
+      const ctx = new Ctx(canvas);
+      ctx.rect(...this.arguments);
+    },
+  },
+  {
+    description: 'rect + stroke',
+    arguments: [
+      {
+        ...center,
+        width: 100,
+        height: 50,
+        stroke: 'black',
+        lineWidth: 5,
+      },
+    ],
+    run(canvas) {
+      const ctx = new Ctx(canvas);
+      ctx.rect(...this.arguments);
+    },
+  },
 ];

@@ -38,14 +38,18 @@ function updateTestSnapshot(testIndex, updatedImageDataUrl) {
 }
 
 function getImagesMatchData(dataUrlA, dataUrlB) {
-  return new Promise(resolve => {
+  return new Promise((resolve, reject) => {
     resemble(dataUrlA)
       .compareTo(dataUrlB)
       .ignoreColors()
-      .onComplete(function(data) {
+      .onComplete(({ rawMisMatchPercentage, getImageDataUrl, error }) => {
+        if (error) {
+          reject(null);
+          return;
+        }
         resolve({
-          doMatch: data.rawMisMatchPercentage < 0.5,
-          diffImageUrl: data.getImageDataUrl(),
+          doMatch: rawMisMatchPercentage < 0.5,
+          diffImageUrl: getImageDataUrl(),
         });
       });
   });
@@ -116,15 +120,15 @@ function runAllTests() {
           updateSnapshotButton.hidden = false;
           updateSnapshotButton.innerHTML = 'Add snapshot';
           snapshot.classList.add('case__snapshot--missing');
-          testRecaps.return;
+          return;
         }
 
         snapshot.src = snapshotImageDataUrl;
 
         const localImageDataUrl = canvas.toDataURL();
 
-        getImagesMatchData(localImageDataUrl, snapshotImageDataUrl).then(
-          ({ doMatch, diffImageUrl }) => {
+        getImagesMatchData(localImageDataUrl, snapshotImageDataUrl)
+          .then(({ doMatch, diffImageUrl }) => {
             snapshotDiff.src = diffImageUrl;
             if (doMatch) {
               container.classList.add('case--unchanged-snapshot');
@@ -134,8 +138,8 @@ function runAllTests() {
               recap.classList.add('test-recap--fail');
               updateSnapshotButton.hidden = false;
             }
-          }
-        );
+          })
+          .catch(() => {});
       });
   });
 }
