@@ -12,13 +12,9 @@ class Paint {
     const dimensions = this.getRectFinalDimensions(props);
 
     ctx.save();
-
     this.applyTransform(props, dimensions);
-
     ctx.rect(0, 0, dimensions.x, dimensions.y);
-
     this.paintShape(props);
-
     ctx.restore();
   }
 
@@ -29,12 +25,9 @@ class Paint {
     const dimensions = this.getImageFinalDimensions(props);
 
     ctx.save();
-
     this.applyTransform(props, dimensions);
-
     this.applyAlpha(props);
     ctx.drawImage(image, 0, 0, dimensions.x, dimensions.y);
-
     ctx.restore();
   }
 
@@ -86,7 +79,17 @@ class Paint {
   }
 
   getPathFinalDimensions({ points, scale = 1 }) {
-    const { minX, minY, maxX, maxY } = this.getPathBoundaries(points);
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+
+    points.forEach(({ x, y }) => {
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+    });
 
     const width = maxX - minX;
     const height = maxY - minY;
@@ -130,27 +133,6 @@ class Paint {
     this.ctx.globalAlpha = alpha;
   }
 
-  getPathBoundaries(points) {
-    let minX = Infinity;
-    let minY = Infinity;
-    let maxX = -Infinity;
-    let maxY = -Infinity;
-
-    points.forEach(({ x, y }) => {
-      if (x < minX) minX = x;
-      if (x > maxX) maxX = x;
-      if (y < minY) minY = y;
-      if (y > maxY) maxY = y;
-    });
-
-    return {
-      minX,
-      minY,
-      maxX,
-      maxY,
-    };
-  }
-
   paintShape(props) {
     const { ctx } = this;
     const { fill, stroke, scaleLineWidth, lineWidth = 1, scale = 1 } = props;
@@ -167,14 +149,6 @@ class Paint {
       ctx.strokeStyle = stroke;
       ctx.stroke();
     }
-  }
-
-  getImageComputedDimensions({ image, scale = 1 }) {
-    return [image.width * scale, image.height * scale];
-  }
-
-  getRectComputedDimensions({ width, height, scale = 1 }) {
-    return [width * scale, height * scale];
   }
 }
 
