@@ -4,6 +4,4 @@
 
 15 minutes later: 🤢
 
-https://luftare.github.io/ctx/
-
 (to do: write some docs)
