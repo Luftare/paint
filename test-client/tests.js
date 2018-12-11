@@ -12,8 +12,8 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.draw(...this.arguments);
+      const paint = new Paint(canvas);
+      paint.image(...this.arguments);
     },
   },
   {
@@ -26,8 +26,8 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.draw(...this.arguments);
+      const paint = new Paint(canvas);
+      paint.image(...this.arguments);
     },
   },
   {
@@ -40,8 +40,8 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.draw(...this.arguments);
+      const paint = new Paint(canvas);
+      paint.image(...this.arguments);
     },
   },
   {
@@ -57,8 +57,8 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.draw(...this.arguments);
+      const paint = new Paint(canvas);
+      paint.image(...this.arguments);
     },
   },
   {
@@ -71,8 +71,8 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.draw(...this.arguments);
+      const paint = new Paint(canvas);
+      paint.image(...this.arguments);
     },
   },
   {
@@ -91,8 +91,8 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.draw(...this.arguments);
+      const paint = new Paint(canvas);
+      paint.image(...this.arguments);
     },
   },
   {
@@ -106,8 +106,8 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.rect(...this.arguments);
+      const paint = new Paint(canvas);
+      paint.rect(...this.arguments);
     },
   },
   {
@@ -124,8 +124,8 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.rect(...this.arguments);
+      const paint = new Paint(canvas);
+      paint.rect(...this.arguments);
     },
   },
   {
@@ -143,8 +143,8 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.rect(...this.arguments);
+      const paint = new Paint(canvas);
+      paint.rect(...this.arguments);
     },
   },
   {
@@ -162,8 +162,8 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.path(...this.arguments);
+      const paint = new Paint(canvas);
+      paint.path(...this.arguments);
     },
   },
   {
@@ -183,8 +183,8 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.path(...this.arguments);
+      const paint = new Paint(canvas);
+      paint.path(...this.arguments);
     },
   },
   {
@@ -199,8 +199,8 @@ const tests = [
       },
     ],
     run(canvas) {
-      const ctx = new Ctx(canvas);
-      ctx.circle(...this.arguments);
+      const paint = new Paint(canvas);
+      paint.circle(...this.arguments);
     },
   },
 ];

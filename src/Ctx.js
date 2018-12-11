@@ -1,4 +1,4 @@
-class Ctx {
+class Paint {
   constructor(canvas) {
     this.ctx = canvas.getContext('2d');
     this.defaultAnchor = { x: 0, y: 0 };
@@ -78,7 +78,7 @@ class Ctx {
     }
   }
 
-  draw(props) {
+  image(props) {
     const { ctx } = this;
     const { image } = props;
 
