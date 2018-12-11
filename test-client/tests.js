@@ -111,14 +111,16 @@ const tests = [
     },
   },
   {
-    description: 'rect + stroke',
+    description: 'rect + stroke + scale line width',
     arguments: [
       {
         ...center,
-        width: 100,
+        width: 50,
         height: 50,
+        scale: 2,
         stroke: 'black',
         lineWidth: 5,
+        scaleLineWidth: true,
       },
     ],
     run(canvas) {

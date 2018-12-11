@@ -12,7 +12,10 @@ class Ctx {
     this.applyAlpha(props);
     this.applyRotation(props);
 
-    ctx.rect(...this.getRectComputedPosition(props), width, height);
+    ctx.rect(
+      ...this.getRectComputedPosition(props),
+      ...this.getRectComputedDimensions(props)
+    );
 
     this.paintShape(props);
 
@@ -61,7 +64,7 @@ class Ctx {
 
   paintShape(props) {
     const { ctx } = this;
-    const { fill, stroke, lineWidth = 1 } = props;
+    const { fill, stroke, scaleLineWidth, lineWidth = 1, scale = 1 } = props;
 
     if (fill) {
       ctx.fillStyle = fill;
@@ -69,7 +72,7 @@ class Ctx {
     }
 
     if (stroke) {
-      ctx.lineWidth = lineWidth;
+      ctx.lineWidth = scaleLineWidth ? lineWidth * scale : lineWidth;
       ctx.strokeStyle = stroke;
       ctx.stroke();
     }
@@ -120,6 +123,10 @@ class Ctx {
 
   getImageComputedDimensions({ image, scale = 1 }) {
     return [image.width * scale, image.height * scale];
+  }
+
+  getRectComputedDimensions({ width, height, scale = 1 }) {
+    return [width * scale, height * scale];
   }
 
   applyRotation({ x, y, angle = 0 }) {
