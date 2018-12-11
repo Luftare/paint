@@ -1,5 +1,10 @@
 const testCases = document.querySelector('.test-cases');
 const testRecaps = document.querySelector('.test-recaps');
+const summaryStatus = document.querySelector('.summary-status');
+
+const RUNNING = 'running';
+const FAILED = 'failed';
+const PASSED = 'passed';
 
 resemble.outputSettings({
   errorColor: {
@@ -19,6 +24,28 @@ function drawGrid(canvas) {
   const ctx = canvas.getContext('2d');
   ctx.fillRect(center.x - 0.5, 0, 1, canvasSize.y);
   ctx.fillRect(0, center.y - 0.5, canvasSize.x, 1);
+}
+
+function updateSummaryStatus(tests) {
+  const processedTestCount = tests.filter(
+    test => test.status === PASSED || test.status === FAILED
+  ).length;
+  const passedTestCount = tests.filter(test => test.status === PASSED).length;
+  const totalTestCount = tests.length;
+  const allTestsProcessed = processedTestCount === totalTestCount;
+
+  if (allTestsProcessed) {
+    const allTestsPassed = passedTestCount === totalTestCount;
+    if (allTestsPassed) {
+      summaryStatus.classList.add('summary-status--pass');
+      summaryStatus.innerHTML = `${passedTestCount} / ${totalTestCount}: PASS`;
+    } else {
+      summaryStatus.classList.add('summary-status--fail');
+      summaryStatus.innerHTML = `${passedTestCount} / ${totalTestCount}: FAIL`;
+    }
+  } else {
+    summaryStatus.innerHTML = `RUNNING...`;
+  }
 }
 
 function updateTestSnapshot(testIndex, updatedImageDataUrl) {
@@ -60,16 +87,19 @@ function runAllTests() {
   testRecaps.innerHTML = '';
 
   tests.forEach((test, testIndex) => {
+    test.status = RUNNING;
     const testId = `test-${testIndex}`;
     const container = document.createElement('div');
     container.classList.add('case');
     container.id = testId;
 
     let testArgumentsHTML = '<table class="case__arguments">';
+    const testKeys = [];
     const propsObject = test.arguments[0];
     for (key in propsObject) {
       const value = propsObject[key];
       if (propsObject.hasOwnProperty(key)) {
+        testKeys.push(key);
         testArgumentsHTML += `
           <tr class="case__argument">
             <td class="case__argument-key">${key}</td>
@@ -81,7 +111,7 @@ function runAllTests() {
 
     container.innerHTML = `
         <div class="case__overview">
-          <div class="case__title">#${testIndex}: ${test.description}</div>
+          <div class="case__title">#${testIndex} ${test.description}:</div>
           <div class="case__arguments">
             ${testArgumentsHTML}
           </div>
@@ -108,7 +138,9 @@ function runAllTests() {
     const recap = document.createElement('a');
     recap.href = `#${testId}`;
     recap.classList.add('test-recap');
-    recap.innerHTML = `#${testIndex}: ${test.description}`;
+    recap.innerHTML = `#${testIndex} <b>${
+      test.description
+    }</b>: ({ ${testKeys.join(', ')} })`;
 
     testCases.appendChild(container);
     testRecaps.appendChild(recap);
@@ -138,6 +170,8 @@ function runAllTests() {
           updateSnapshotButton.hidden = false;
           updateSnapshotButton.innerHTML = 'Add snapshot';
           snapshot.classList.add('case__snapshot--missing');
+          test.status = FAILED;
+          updateSummaryStatus(tests);
           return;
         }
 
@@ -151,11 +185,14 @@ function runAllTests() {
             if (doMatch) {
               container.classList.add('case--unchanged-snapshot');
               recap.classList.add('test-recap--success');
+              test.status = PASSED;
             } else {
+              test.status = FAILED;
               container.classList.add('case--changed-snapshot');
               recap.classList.add('test-recap--fail');
               updateSnapshotButton.hidden = false;
             }
+            updateSummaryStatus(tests);
           })
           .catch(() => {});
       });

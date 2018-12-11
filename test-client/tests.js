@@ -17,7 +17,7 @@ const tests = [
     },
   },
   {
-    description: 'alpha',
+    description: 'image',
     arguments: [
       {
         position: center,
@@ -31,7 +31,7 @@ const tests = [
     },
   },
   {
-    description: 'scale',
+    description: 'image',
     arguments: [
       {
         position: center,
@@ -45,7 +45,7 @@ const tests = [
     },
   },
   {
-    description: 'anchor',
+    description: 'image',
     arguments: [
       {
         position: center,
@@ -62,7 +62,7 @@ const tests = [
     },
   },
   {
-    description: 'angle',
+    description: 'image',
     arguments: [
       {
         position: center,
@@ -76,7 +76,7 @@ const tests = [
     },
   },
   {
-    description: 'angle + anchor + scale + alpha',
+    description: 'image',
     arguments: [
       {
         position: center,
@@ -96,7 +96,7 @@ const tests = [
     },
   },
   {
-    description: 'rect + fill',
+    description: 'rect',
     arguments: [
       {
         position: center,
@@ -111,7 +111,7 @@ const tests = [
     },
   },
   {
-    description: 'rect + stroke + scale line width',
+    description: 'rect',
     arguments: [
       {
         position: center,
@@ -129,7 +129,7 @@ const tests = [
     },
   },
   {
-    description: 'rect + stroke + fill + angle',
+    description: 'rect',
     arguments: [
       {
         position: center,
@@ -149,7 +149,7 @@ const tests = [
     },
   },
   {
-    description: 'path + stroke',
+    description: 'path',
     arguments: [
       {
         points: [
@@ -168,7 +168,7 @@ const tests = [
     },
   },
   {
-    description: 'path + stroke + fill + close path',
+    description: 'path',
     arguments: [
       {
         points: [
@@ -189,7 +189,7 @@ const tests = [
     },
   },
   {
-    description: 'path + stroke + fill + close path',
+    description: 'path',
     arguments: [
       {
         points: [
@@ -213,7 +213,7 @@ const tests = [
     },
   },
   {
-    description: 'path + stroke + fill + close path',
+    description: 'path',
     arguments: [
       {
         points: [

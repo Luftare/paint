@@ -9,16 +9,31 @@ class Paint {
     const { ctx } = this;
     const { width, height, position = this.defaultPosition } = props;
 
-    ctx.save();
-    this.applyAlpha(props);
-    this.applyRotation(props);
+    const dimensions = this.getRectFinalDimensions(props);
 
-    ctx.rect(
-      ...this.getRectComputedPosition(props),
-      ...this.getRectComputedDimensions(props)
-    );
+    ctx.save();
+
+    this.applyTransform(props, dimensions);
+
+    ctx.rect(0, 0, dimensions.x, dimensions.y);
 
     this.paintShape(props);
+
+    ctx.restore();
+  }
+
+  image(props) {
+    const { ctx } = this;
+    const { image, position } = props;
+
+    const dimensions = this.getImageFinalDimensions(props);
+
+    ctx.save();
+
+    this.applyTransform(props, dimensions);
+
+    this.applyAlpha(props);
+    ctx.drawImage(image, 0, 0, dimensions.x, dimensions.y);
 
     ctx.restore();
   }
@@ -28,12 +43,8 @@ class Paint {
     const { position, radius, scale = 1 } = props;
 
     ctx.save();
-    this.applyAlpha(props);
-
     ctx.arc(position.x, position.y, radius * scale, 0, Math.PI * 2);
-
     this.paintShape(props);
-
     ctx.restore();
   }
 
@@ -46,21 +57,44 @@ class Paint {
       scale = 1,
     } = props;
 
-    ctx.save();
+    const dimensions = this.getPathFinalDimensions(props);
 
-    this.applyRotation(props);
-    this.applyPosition(position);
-    this.applyPathAnchor(props);
+    ctx.save();
+    this.applyTransform(props, dimensions);
     this.connectPoints(points, scale);
 
     if (closePath) {
       ctx.closePath();
     }
 
-    this.applyAlpha(props);
     this.paintShape(props);
-
     ctx.restore();
+  }
+
+  applyTransform(props, dimensions) {
+    this.applyRotation(props);
+    this.applyAnchor(props, dimensions);
+    this.applyPosition(props);
+  }
+
+  getImageFinalDimensions({ image, scale = 1 }) {
+    return { x: image.width * scale, y: image.height * scale };
+  }
+
+  getRectFinalDimensions({ width, height, scale = 1 }) {
+    return { x: width * scale, y: height * scale };
+  }
+
+  getPathFinalDimensions({ points, scale = 1 }) {
+    const { minX, minY, maxX, maxY } = this.getPathBoundaries(points);
+
+    const width = maxX - minX;
+    const height = maxY - minY;
+
+    return {
+      x: width * scale,
+      y: height * scale,
+    };
   }
 
   connectPoints(points, scale) {
@@ -76,17 +110,24 @@ class Paint {
     });
   }
 
-  applyPosition({ x, y }) {
-    this.ctx.translate(x, y);
+  applyRotation({ position = this.defaultPosition, angle = 0 }) {
+    const { ctx } = this;
+
+    ctx.translate(position.x, position.y);
+    ctx.rotate(angle);
+    ctx.translate(-position.x, -position.y);
   }
 
-  applyPathAnchor({ anchor = this.defaultAnchor, points, scale = 1 }) {
-    const { minX, minY, maxX, maxY } = this.getPathBoundaries(points);
-    const { ctx } = this;
-    const width = maxX - minX;
-    const height = maxY - minY;
+  applyPosition({ position = this.defaultPosition }) {
+    this.ctx.translate(position.x, position.y);
+  }
 
-    ctx.translate(-width * anchor.x * scale, -height * anchor.y * scale);
+  applyAnchor({ anchor = this.defaultAnchor }, dimensions) {
+    this.ctx.translate(-dimensions.x * anchor.x, -dimensions.y * anchor.y);
+  }
+
+  applyAlpha({ alpha }) {
+    this.ctx.globalAlpha = alpha;
   }
 
   getPathBoundaries(points) {
@@ -114,6 +155,8 @@ class Paint {
     const { ctx } = this;
     const { fill, stroke, scaleLineWidth, lineWidth = 1, scale = 1 } = props;
 
+    this.applyAlpha(props);
+
     if (fill) {
       ctx.fillStyle = fill;
       ctx.fill();
@@ -126,65 +169,12 @@ class Paint {
     }
   }
 
-  image(props) {
-    const { ctx } = this;
-    const { image } = props;
-
-    ctx.save();
-    this.applyAlpha(props);
-    this.applyRotation(props);
-
-    ctx.drawImage(
-      image,
-      ...this.getImageComputedPosition(props),
-      ...this.getImageComputedDimensions(props)
-    );
-    ctx.restore();
-  }
-
-  applyAlpha({ alpha }) {
-    this.ctx.globalAlpha = alpha;
-  }
-
-  getRectComputedPosition({
-    position,
-    width,
-    height,
-    anchor = this.defaultAnchor,
-    scale = 1,
-  }) {
-    return [
-      position.x - width * anchor.x * scale,
-      position.y - height * anchor.y * scale,
-    ];
-  }
-
-  getImageComputedPosition({
-    position,
-    image,
-    anchor = this.defaultAnchor,
-    scale = 1,
-  }) {
-    return [
-      position.x - scale * image.width * anchor.x,
-      position.y - scale * image.height * anchor.y,
-    ];
-  }
-
   getImageComputedDimensions({ image, scale = 1 }) {
     return [image.width * scale, image.height * scale];
   }
 
   getRectComputedDimensions({ width, height, scale = 1 }) {
     return [width * scale, height * scale];
-  }
-
-  applyRotation({ position = this.defaultPosition, angle = 0 }) {
-    const { ctx } = this;
-
-    ctx.translate(position.x, position.y);
-    ctx.rotate(angle);
-    ctx.translate(-position.x, -position.y);
   }
 }
 

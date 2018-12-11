@@ -1,4 +1,16 @@
 <style>
+  * {
+    font-family: Arial, Helvetica, sans-serif;
+  }
+
+  .summary-status--pass {
+    color: lightgreen;
+  }
+
+  .summary-status--fail {
+    color: red;
+  }
+
   .test-cases {
     display: flex;
     flex-wrap: wrap;
@@ -28,6 +40,8 @@
 
   .case__title {
     margin-bottom: 8px;
+    font-size: 24px;
+    font-weight: bold;
   }
 
   .case__canvas {
@@ -60,9 +74,9 @@
   .test-recap {
     align-self: flex-start;
     margin-top: 4px;
-    color: black;
+    color: grey;
     font-size: 16px;
-    padding: 8px;
+    padding: 4px;
     padding-left: 16px;
     border-left: solid grey 20px;
   }
@@ -101,7 +115,7 @@
   }
 </style>
 <img class="test-image" src="test-image.png" hidden />
-<h2>Summary</h2>
+<h2>Summary <span class="summary-status"></span></h2>
 <div class="test-recaps"></div>
 <h2>Details</h2>
 <div class="test-cases"></div>
