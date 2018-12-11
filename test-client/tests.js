@@ -7,7 +7,7 @@ const tests = [
     description: 'image',
     arguments: [
       {
-        ...center,
+        position: center,
         image,
       },
     ],
@@ -20,7 +20,7 @@ const tests = [
     description: 'alpha',
     arguments: [
       {
-        ...center,
+        position: center,
         image,
         alpha: 0.5,
       },
@@ -34,7 +34,7 @@ const tests = [
     description: 'scale',
     arguments: [
       {
-        ...center,
+        position: center,
         image,
         scale: 2,
       },
@@ -48,7 +48,7 @@ const tests = [
     description: 'anchor',
     arguments: [
       {
-        ...center,
+        position: center,
         anchor: {
           x: 0.5,
           y: 0.5,
@@ -65,7 +65,7 @@ const tests = [
     description: 'angle',
     arguments: [
       {
-        ...center,
+        position: center,
         angle: Math.PI * 0.25,
         image,
       },
@@ -79,7 +79,7 @@ const tests = [
     description: 'angle + anchor + scale + alpha',
     arguments: [
       {
-        ...center,
+        position: center,
         anchor: {
           x: 0.5,
           y: 0.5,
@@ -99,7 +99,7 @@ const tests = [
     description: 'rect + fill',
     arguments: [
       {
-        ...center,
+        position: center,
         width: 100,
         height: 50,
         fill: 'black',
@@ -114,7 +114,7 @@ const tests = [
     description: 'rect + stroke + scale line width',
     arguments: [
       {
-        ...center,
+        position: center,
         width: 50,
         height: 50,
         scale: 2,
@@ -132,11 +132,12 @@ const tests = [
     description: 'rect + stroke + fill + angle',
     arguments: [
       {
-        ...center,
+        position: center,
         width: 100,
         height: 50,
         stroke: 'black',
         fill: 'green',
+        scale: 2,
         lineWidth: 5,
         angle: Math.PI * 0.3,
         anchor: { x: 0.5, y: 0.5 },
@@ -171,7 +172,7 @@ const tests = [
     arguments: [
       {
         points: [
-          { x: 10, y: 10 },
+          { x: 0, y: 0 },
           { x: 200, y: 200 },
           { x: 40, y: 140 },
           { x: 160, y: 70 },
@@ -188,14 +189,82 @@ const tests = [
     },
   },
   {
+    description: 'path + stroke + fill + close path',
+    arguments: [
+      {
+        points: [
+          { x: 0, y: 0 },
+          { x: 200, y: 200 },
+          { x: 40, y: 140 },
+          { x: 160, y: 70 },
+        ],
+        stroke: 'black',
+        closePath: true,
+        anchor: { x: 0.5, y: 0.5 },
+        angle: 0.5,
+        position: center,
+        fill: 'red',
+        lineWidth: 5,
+      },
+    ],
+    run(canvas) {
+      const paint = new Paint(canvas);
+      paint.path(...this.arguments);
+    },
+  },
+  {
+    description: 'path + stroke + fill + close path',
+    arguments: [
+      {
+        points: [
+          { x: 0, y: 0 },
+          { x: 200, y: 200 },
+          { x: 40, y: 140 },
+          { x: 160, y: 70 },
+        ],
+        stroke: 'black',
+        closePath: true,
+        anchor: { x: 0.5, y: 0.5 },
+        angle: 0.5,
+        position: center,
+        scale: 0.5,
+        scaleLineWidth: true,
+        fill: 'red',
+        lineWidth: 5,
+      },
+    ],
+    run(canvas) {
+      const paint = new Paint(canvas);
+      paint.path(...this.arguments);
+    },
+  },
+  {
     description: 'circle',
     arguments: [
       {
-        ...center,
+        position: center,
         radius: 55,
         stroke: 'black',
         fill: 'red',
         lineWidth: 5,
+      },
+    ],
+    run(canvas) {
+      const paint = new Paint(canvas);
+      paint.circle(...this.arguments);
+    },
+  },
+  {
+    description: 'circle',
+    arguments: [
+      {
+        position: center,
+        radius: 55,
+        stroke: 'black',
+        fill: 'red',
+        scale: 0.5,
+        lineWidth: 5,
+        scaleLineWidth: true,
       },
     ],
     run(canvas) {

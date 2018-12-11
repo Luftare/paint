@@ -64,9 +64,27 @@ function runAllTests() {
     const container = document.createElement('div');
     container.classList.add('case');
     container.id = testId;
+
+    let testArgumentsHTML = '<table class="case__arguments">';
+    const propsObject = test.arguments[0];
+    for (key in propsObject) {
+      const value = propsObject[key];
+      if (propsObject.hasOwnProperty(key)) {
+        testArgumentsHTML += `
+          <tr class="case__argument">
+            <td class="case__argument-key">${key}</td>
+            <td class="case__argument-value">${JSON.stringify(value)}</td>
+          </tr>`;
+      }
+    }
+    testArgumentsHTML += '</table>';
+
     container.innerHTML = `
         <div class="case__overview">
           <div class="case__title">#${testIndex}: ${test.description}</div>
+          <div class="case__arguments">
+            ${testArgumentsHTML}
+          </div>
           <button class="case__update-snapshot" hidden>Update snapshot</button>
         </div>
         <div>

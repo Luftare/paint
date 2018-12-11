@@ -2,11 +2,12 @@ class Paint {
   constructor(canvas) {
     this.ctx = canvas.getContext('2d');
     this.defaultAnchor = { x: 0, y: 0 };
+    this.defaultPosition = { x: 0, y: 0 };
   }
 
   rect(props) {
     const { ctx } = this;
-    const { width, height } = props;
+    const { width, height, position = this.defaultPosition } = props;
 
     ctx.save();
     this.applyAlpha(props);
@@ -24,12 +25,12 @@ class Paint {
 
   circle(props) {
     const { ctx } = this;
-    const { x, y, radius } = props;
+    const { position, radius, scale = 1 } = props;
 
     ctx.save();
     this.applyAlpha(props);
 
-    ctx.arc(x, y, radius, 0, Math.PI * 2);
+    ctx.arc(position.x, position.y, radius * scale, 0, Math.PI * 2);
 
     this.paintShape(props);
 
@@ -38,28 +39,75 @@ class Paint {
 
   path(props) {
     const { ctx } = this;
-    const { points, closePath } = props;
+    const {
+      points,
+      closePath,
+      position = this.defaultPosition,
+      scale = 1,
+    } = props;
 
     ctx.save();
-    this.applyAlpha(props);
-    this.applyRotation(props);
 
-    points.forEach(({ x, y }, index) => {
-      if (index === 0) {
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-      } else {
-        ctx.lineTo(x, y);
-      }
-    });
+    this.applyRotation(props);
+    this.applyPosition(position);
+    this.applyPathAnchor(props);
+    this.connectPoints(points, scale);
 
     if (closePath) {
       ctx.closePath();
     }
 
+    this.applyAlpha(props);
     this.paintShape(props);
 
     ctx.restore();
+  }
+
+  connectPoints(points, scale) {
+    const { ctx } = this;
+
+    points.forEach(({ x, y }, index) => {
+      if (index === 0) {
+        ctx.beginPath();
+        ctx.moveTo(x * scale, y * scale);
+      } else {
+        ctx.lineTo(x * scale, y * scale);
+      }
+    });
+  }
+
+  applyPosition({ x, y }) {
+    this.ctx.translate(x, y);
+  }
+
+  applyPathAnchor({ anchor = this.defaultAnchor, points, scale = 1 }) {
+    const { minX, minY, maxX, maxY } = this.getPathBoundaries(points);
+    const { ctx } = this;
+    const width = maxX - minX;
+    const height = maxY - minY;
+
+    ctx.translate(-width * anchor.x * scale, -height * anchor.y * scale);
+  }
+
+  getPathBoundaries(points) {
+    let minX = Infinity;
+    let minY = Infinity;
+    let maxX = -Infinity;
+    let maxY = -Infinity;
+
+    points.forEach(({ x, y }) => {
+      if (x < minX) minX = x;
+      if (x > maxX) maxX = x;
+      if (y < minY) minY = y;
+      if (y > maxY) maxY = y;
+    });
+
+    return {
+      minX,
+      minY,
+      maxX,
+      maxY,
+    };
   }
 
   paintShape(props) {
@@ -99,25 +147,27 @@ class Paint {
   }
 
   getRectComputedPosition({
-    x,
-    y,
+    position,
     width,
     height,
     anchor = this.defaultAnchor,
+    scale = 1,
   }) {
-    return [x - width * anchor.x, y - height * anchor.y];
+    return [
+      position.x - width * anchor.x * scale,
+      position.y - height * anchor.y * scale,
+    ];
   }
 
   getImageComputedPosition({
-    x,
-    y,
+    position,
     image,
     anchor = this.defaultAnchor,
     scale = 1,
   }) {
     return [
-      x - scale * image.width * anchor.x,
-      y - scale * image.height * anchor.y,
+      position.x - scale * image.width * anchor.x,
+      position.y - scale * image.height * anchor.y,
     ];
   }
 
@@ -129,12 +179,12 @@ class Paint {
     return [width * scale, height * scale];
   }
 
-  applyRotation({ x, y, angle = 0 }) {
+  applyRotation({ position = this.defaultPosition, angle = 0 }) {
     const { ctx } = this;
 
-    ctx.translate(x, y);
+    ctx.translate(position.x, position.y);
     ctx.rotate(angle);
-    ctx.translate(-x, -y);
+    ctx.translate(-position.x, -position.y);
   }
 }
 
