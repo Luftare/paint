@@ -159,7 +159,9 @@ const tests = [
           { x: 160, y: 70 },
         ],
         stroke: 'black',
-        lineWidth: 3,
+        lineWidth: 16,
+        lineCap: 'round',
+        lineJoin: 'round',
       },
     ],
     run(canvas) {

@@ -135,7 +135,15 @@ class Paint {
 
   paintShape(props) {
     const { ctx } = this;
-    const { fill, stroke, scaleLineWidth, lineWidth = 1, scale = 1 } = props;
+    const {
+      fill,
+      stroke,
+      scaleLineWidth,
+      lineWidth = 1,
+      lineCap,
+      lineJoin,
+      scale = 1,
+    } = props;
 
     this.applyAlpha(props);
 
@@ -145,6 +153,8 @@ class Paint {
     }
 
     if (stroke) {
+      if (lineCap) ctx.lineCap = lineCap;
+      if (lineJoin) ctx.lineJoin = lineJoin;
       ctx.lineWidth = scaleLineWidth ? lineWidth * scale : lineWidth;
       ctx.strokeStyle = stroke;
       ctx.stroke();

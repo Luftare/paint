@@ -87,6 +87,9 @@ function runAllTests() {
   testCases.innerHTML = '';
   testRecaps.innerHTML = '';
 
+  summaryStatus.classList.remove('summary-status--pass');
+  summaryStatus.classList.remove('summary-status--fail');
+
   tests.forEach((test, testIndex) => {
     test.status = RUNNING;
     const testId = `test-${testIndex}`;
