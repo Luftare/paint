@@ -75,7 +75,8 @@ function getImagesMatchData(dataUrlA, dataUrlB) {
           return;
         }
         resolve({
-          doMatch: rawMisMatchPercentage < 0.5,
+          difference: rawMisMatchPercentage,
+          doMatch: rawMisMatchPercentage < 0.7,
           diffImageUrl: getImageDataUrl(),
         });
       });
@@ -128,7 +129,7 @@ function runAllTests() {
           }px; height: ${canvasSize.y}px;"/>
         </div>
         <div>
-          <div>Snapshot diff</div>
+          <div>Difference: <span class="case__snapshot-difference-percentage"></span></div>
           <img class="case__snapshot-diff" style="width: ${
             canvasSize.x
           }px; height: ${canvasSize.y}px;"/>
@@ -151,6 +152,9 @@ function runAllTests() {
     );
     const snapshot = container.querySelector('.case__snapshot');
     const snapshotDiff = container.querySelector('.case__snapshot-diff');
+    const snapshotDiffPercentage = container.querySelector(
+      '.case__snapshot-difference-percentage'
+    );
 
     canvas.width = canvasSize.x;
     canvas.height = canvasSize.y;
@@ -180,7 +184,9 @@ function runAllTests() {
         const localImageDataUrl = canvas.toDataURL();
 
         getImagesMatchData(localImageDataUrl, snapshotImageDataUrl)
-          .then(({ doMatch, diffImageUrl }) => {
+          .then(({ doMatch, diffImageUrl, difference }) => {
+            snapshotDiffPercentage.innerHTML = `${Math.floor(difference * 100) /
+              100}%`;
             snapshotDiff.src = diffImageUrl;
             if (doMatch) {
               container.classList.add('case--unchanged-snapshot');
