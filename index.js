@@ -9,7 +9,10 @@ app.use(bodyParser.json());
 
 app.use('/', express.static(__dirname + '/test-client'));
 app.use('/', express.static(__dirname + '/src'));
-app.use('/', express.static(__dirname + '/node_modules/resemblejs'));
+app.use(
+  '/resemble.js',
+  express.static(__dirname + '/node_modules/resemblejs/resemble.js')
+);
 
 app.get('/snapshots/:index', (req, res) => {
   const snapshotPath = `snapshots/${req.params.index}.txt`;
@@ -35,4 +38,4 @@ app.post('/snapshots', (req, res) => {
   );
 });
 
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Test running on port ${port}`));

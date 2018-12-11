@@ -4,7 +4,7 @@ const center = { x: canvasSize.x / 2, y: canvasSize.y / 2 };
 
 const tests = [
   {
-    description: 'Image',
+    description: 'image',
     arguments: [
       {
         ...center,
@@ -17,7 +17,7 @@ const tests = [
     },
   },
   {
-    description: 'Alpha',
+    description: 'alpha',
     arguments: [
       {
         ...center,
@@ -31,7 +31,7 @@ const tests = [
     },
   },
   {
-    description: 'Scale',
+    description: 'scale',
     arguments: [
       {
         ...center,
@@ -45,7 +45,7 @@ const tests = [
     },
   },
   {
-    description: 'Anchor',
+    description: 'anchor',
     arguments: [
       {
         ...center,
@@ -62,7 +62,7 @@ const tests = [
     },
   },
   {
-    description: 'Angle',
+    description: 'angle',
     arguments: [
       {
         ...center,
@@ -76,7 +76,7 @@ const tests = [
     },
   },
   {
-    description: 'Angle + anchor + scale + alpha',
+    description: 'angle + anchor + scale + alpha',
     arguments: [
       {
         ...center,
