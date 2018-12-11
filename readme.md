@@ -1,4 +1,4 @@
-# Ctx
+# Paint
 
 😊 Ok, let's just rotate this image on the canvas.
 
