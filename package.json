@@ -1,23 +1,22 @@
 {
-  "name": "ctx",
+  "name": "paint",
   "version": "1.0.0",
-  "description": "😊 Ok, let's just rotate this image on the canvas.",
-  "main": "Ctx.js",
+  "description": "canvas 2d paint utility",
+  "main": "Paint.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js --watch"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Luftare/ctx.git"
+    "url": "git+https://github.com/Luftare/paint.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Luftare/ctx/issues"
+    "url": "https://github.com/Luftare/paint/issues"
   },
-  "homepage": "https://github.com/Luftare/ctx#readme",
+  "homepage": "https://github.com/Luftare/paint#readme",
   "dependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
