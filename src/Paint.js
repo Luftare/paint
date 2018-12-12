@@ -1,17 +1,41 @@
 class Paint {
   constructor(canvas) {
+    this.canvas = canvas;
     this.ctx = canvas.getContext('2d');
     this.defaultAnchor = { x: 0, y: 0 };
     this.defaultPosition = { x: 0, y: 0 };
+    this.viewTransform = {
+      angle: 0,
+      offset: { x: 0, y: 0 },
+      scale: 1,
+    };
+  }
+
+  setViewAngle(angle) {
+    this.viewTransform.angle = angle;
+  }
+
+  setViewScale(scale) {
+    this.viewTransform.scale = scale;
+  }
+
+  setViewOffset(x, y) {
+    this.viewTransform.offset = { x, y };
+  }
+
+  clear() {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   rect(props) {
     const { ctx } = this;
+
     const { width, height, position = this.defaultPosition } = props;
 
     const dimensions = this.getRectFinalDimensions(props);
 
     ctx.save();
+    this.applyViewTransform();
     this.applyTransform(props, dimensions);
     ctx.rect(0, 0, dimensions.x, dimensions.y);
     this.paintShape(props);
@@ -25,6 +49,7 @@ class Paint {
     const dimensions = this.getImageFinalDimensions(props);
 
     ctx.save();
+    this.applyViewTransform();
     this.applyTransform(props, dimensions);
     this.applyAlpha(props);
     ctx.drawImage(image, 0, 0, dimensions.x, dimensions.y);
@@ -36,6 +61,7 @@ class Paint {
     const { position, radius, scale = 1 } = props;
 
     ctx.save();
+    this.applyViewTransform();
     ctx.arc(position.x, position.y, radius * scale, 0, Math.PI * 2);
     this.paintShape(props);
     ctx.restore();
@@ -53,6 +79,7 @@ class Paint {
     const dimensions = this.getPathFinalDimensions(props);
 
     ctx.save();
+    this.applyViewTransform();
     this.applyTransform(props, dimensions);
     this.connectPoints(points, scale);
 
@@ -62,6 +89,18 @@ class Paint {
 
     this.paintShape(props);
     ctx.restore();
+  }
+
+  applyViewTransform() {
+    const { ctx, canvas, viewTransform } = this;
+    const { width, height } = canvas;
+    const { angle, offset, scale } = viewTransform;
+
+    ctx.translate(width * 0.5, height * 0.5);
+    ctx.rotate(-angle);
+    ctx.translate(-offset.x, -offset.y);
+    ctx.scale(scale, scale);
+    ctx.translate(-width * 0.5, -height * 0.5);
   }
 
   applyTransform(props, dimensions) {
@@ -92,10 +131,12 @@ class Paint {
     });
 
     const width = maxX - minX;
+
     const height = maxY - minY;
 
     return {
       x: width * scale,
+
       y: height * scale,
     };
   }

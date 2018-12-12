@@ -274,4 +274,31 @@ const tests = [
       paint.circle(...this.arguments);
     },
   },
+  {
+    description: 'view transform',
+    arguments: [
+      {
+        angle: 0.3,
+        offset: { x: 50, y: 50 },
+        scale: 0.5,
+      },
+    ],
+    run(canvas) {
+      const paint = new Paint(canvas);
+      paint.setViewScale(this.arguments[0].scale);
+      paint.setViewOffset(
+        this.arguments[0].offset.x,
+        this.arguments[0].offset.y
+      );
+      paint.setViewAngle(this.arguments[0].angle);
+
+      paint.rect({
+        position: center,
+        width: 150,
+        height: 100,
+        fill: 'black',
+        anchor: { x: 0.5, y: 0.5 },
+      });
+    },
+  },
 ];
