@@ -17,12 +17,10 @@
     "url": "https://github.com/Luftare/paint/issues"
   },
   "homepage": "https://github.com/Luftare/paint#readme",
-  "dependencies": {
+  "devDependencies": {
     "body-parser": "^1.18.3",
     "express": "^4.16.4",
-    "resemblejs": "^3.0.0"
-  },
-  "devDependencies": {
+    "resemblejs": "^3.0.0",
     "nodemon": "^1.18.7"
   }
 }
