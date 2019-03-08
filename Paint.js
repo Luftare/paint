@@ -9,6 +9,7 @@ class Paint {
       offset: { x: 0, y: 0 },
       scale: 1,
     };
+    this.images = {};
   }
 
   fullScreen() {
@@ -18,6 +19,23 @@ class Paint {
     window.addEventListener('resize', () => {
       this.canvas.width = window.innerWidth;
       this.canvas.height = window.innerHeight;
+    });
+  }
+
+  loadImages(sources) {
+    return new Promise(res => {
+      let loadedCount = 0;
+
+      sources.forEach(source => {
+        this.images[source] = new Image();
+        this.images[source].onload = () => {
+          loadedCount++;
+          if(loadedCount === sources.length) {
+            res();
+          }
+        };
+        this.images[source].src = source;
+      });
     });
   }
 
@@ -40,8 +58,6 @@ class Paint {
   rect(props) {
     const { ctx } = this;
 
-    const { width, height, position = this.defaultPosition } = props;
-
     const dimensions = this.getRectFinalDimensions(props);
 
     ctx.save();
@@ -54,7 +70,9 @@ class Paint {
 
   image(props) {
     const { ctx } = this;
-    const { image, position } = props;
+    const { image } = props;
+
+    const imageElement = typeof image === 'string' ? this.images[image] : image;
 
     const dimensions = this.getImageFinalDimensions(props);
 
@@ -62,7 +80,7 @@ class Paint {
     this.applyViewTransform();
     this.applyTransform(props, dimensions);
     this.applyAlpha(props);
-    ctx.drawImage(image, 0, 0, dimensions.x, dimensions.y);
+    ctx.drawImage(imageElement, 0, 0, dimensions.x, dimensions.y);
     ctx.restore();
   }
 
