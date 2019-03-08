@@ -8,7 +8,7 @@ const port = 9999;
 app.use(bodyParser.json());
 
 app.use('/', express.static(__dirname + '/test-client'));
-app.use('/', express.static(__dirname + '/src'));
+app.use('/', express.static(__dirname));
 app.use(
   '/resemble.js',
   express.static(__dirname + '/node_modules/resemblejs/resemble.js')

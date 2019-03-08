@@ -204,5 +204,5 @@ class Paint {
 }
 
 try {
-  module.exports = Ctx;
+  module.exports = Paint;
 } catch (e) {}
