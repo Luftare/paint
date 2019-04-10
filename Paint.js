@@ -90,7 +90,9 @@ class Paint {
 
     ctx.save();
     this.applyViewTransform();
+    ctx.beginPath();
     ctx.arc(position.x, position.y, radius * scale, 0, Math.PI * 2);
+    ctx.closePath();
     this.paintShape(props);
     ctx.restore();
   }
