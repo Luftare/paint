@@ -63,7 +63,9 @@ class Paint {
     ctx.save();
     this.applyViewTransform();
     this.applyTransform(props, dimensions);
+    ctx.beginPath();
     ctx.rect(0, 0, dimensions.x, dimensions.y);
+    ctx.closePath();
     this.paintShape(props);
     ctx.restore();
   }
