@@ -23,20 +23,11 @@ class Paint {
   }
 
   loadImages(sources) {
-    return new Promise(res => {
-      let loadedCount = 0;
-
-      sources.forEach(source => {
-        this.images[source] = new Image();
-        this.images[source].onload = () => {
-          loadedCount++;
-          if(loadedCount === sources.length) {
-            res();
-          }
-        };
-        this.images[source].src = source;
-      });
-    });
+    return Promise.all(sources.map(source => new Promise(resolve => {
+      this.images[source] = new Image();
+      this.images[source].onload = resolve;
+      this.images[source].src = source;
+    })))
   }
 
   setViewAngle(angle) {
@@ -237,4 +228,4 @@ class Paint {
 
 try {
   module.exports = Paint;
-} catch (e) {}
+} catch (e) { }
