@@ -2,16 +2,24 @@
   "name": "typed-paint",
   "version": "2.0.0",
   "description": "canvas 2d paint utility",
-  "main": "Paint.js",
+  "main": "lib/index.js",
+  "files": [
+    "lib/**/*"
+  ],
   "scripts": {
     "build": "tsc",
+    "prepare": "npm run build",
     "dev": "nodemon test-server.js --watch"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Luftare/paint.git"
   },
-  "keywords": [],
+  "keywords": [
+    "canvas",
+    "typescript",
+    "util"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
