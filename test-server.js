@@ -10,6 +10,10 @@ app.use(bodyParser.json());
 app.use('/', express.static(__dirname + '/test-client'));
 app.use('/', express.static(__dirname));
 app.use(
+  '/Paint.js',
+  express.static(__dirname + '/lib/index.js')
+);
+app.use(
   '/resemble.js',
   express.static(__dirname + '/node_modules/resemblejs/resemble.js')
 );

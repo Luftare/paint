@@ -18,8 +18,6 @@ resemble.outputSettings({
   outputDiff: true,
 });
 
-window.addEventListener('load', runAllTests);
-
 function drawGrid(canvas) {
   const ctx = canvas.getContext('2d');
   ctx.fillRect(center.x - 0.5, 0, 1, canvasSize.y);
@@ -47,6 +45,8 @@ function updateSummaryStatus(tests) {
     summaryStatus.innerHTML = `RUNNING...`;
   }
 }
+
+import('/Paint.js').then(({ Paint }) => runAllTests(Paint));
 
 function updateTestSnapshot(testIndex, updatedImageDataUrl) {
   return new Promise(resolve => {
@@ -83,7 +83,7 @@ function getImagesMatchData(dataUrlA, dataUrlB) {
   });
 }
 
-function runAllTests() {
+function runAllTests(Paint) {
   testCases.innerHTML = '';
   testRecaps.innerHTML = '';
 
@@ -100,7 +100,7 @@ function runAllTests() {
     let testArgumentsHTML = '<table class="case__arguments">';
     const testKeys = [];
     const propsObject = test.arguments[0];
-    for (key in propsObject) {
+    for (let key in propsObject) {
       const value = propsObject[key];
       if (propsObject.hasOwnProperty(key)) {
         testKeys.push(key);
@@ -128,14 +128,14 @@ function runAllTests() {
         <div>
           <div>Snapshot</div>
           <img class="case__snapshot" style="width: ${
-            canvasSize.x
-          }px; height: ${canvasSize.y}px;"/>
+      canvasSize.x
+      }px; height: ${canvasSize.y}px;"/>
         </div>
         <div>
           <div>Difference: <span class="case__snapshot-difference-percentage"></span></div>
           <img class="case__snapshot-diff" style="width: ${
-            canvasSize.x
-          }px; height: ${canvasSize.y}px;"/>
+      canvasSize.x
+      }px; height: ${canvasSize.y}px;"/>
         </div>
     `;
 
@@ -144,7 +144,7 @@ function runAllTests() {
     recap.classList.add('test-recap');
     recap.innerHTML = `#${testIndex} <b>${
       test.description
-    }</b>: ({ ${testKeys.join(', ')} })`;
+      }</b>: ({ ${testKeys.join(', ')} })`;
 
     testCases.appendChild(container);
     testRecaps.appendChild(recap);
@@ -163,12 +163,12 @@ function runAllTests() {
     canvas.height = canvasSize.y;
 
     updateSnapshotButton.addEventListener('click', () => {
-      updateTestSnapshot(testIndex, canvas.toDataURL()).then(runAllTests);
+      updateTestSnapshot(testIndex, canvas.toDataURL()).then(() => runAllTests(Paint));
     });
 
     drawGrid(canvas);
 
-    test.run(canvas);
+    test.run(canvas, Paint);
 
     fetch(`snapshots/${testIndex}`)
       .then(res => res.text())
@@ -203,7 +203,7 @@ function runAllTests() {
             }
             updateSummaryStatus(tests);
           })
-          .catch(() => {});
+          .catch(() => { });
       });
   });
 }

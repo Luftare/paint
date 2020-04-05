@@ -11,7 +11,7 @@ const tests = [
         image,
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.image(...this.arguments);
     },
@@ -25,7 +25,7 @@ const tests = [
         alpha: 0.5,
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.image(...this.arguments);
     },
@@ -39,7 +39,7 @@ const tests = [
         scale: 2,
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.image(...this.arguments);
     },
@@ -56,7 +56,7 @@ const tests = [
         image,
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.image(...this.arguments);
     },
@@ -70,7 +70,7 @@ const tests = [
         image,
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.image(...this.arguments);
     },
@@ -90,7 +90,7 @@ const tests = [
         image,
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.image(...this.arguments);
     },
@@ -105,7 +105,7 @@ const tests = [
         fill: 'black',
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.rect(...this.arguments);
     },
@@ -123,7 +123,7 @@ const tests = [
         scaleLineWidth: true,
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.rect(...this.arguments);
     },
@@ -143,7 +143,7 @@ const tests = [
         anchor: { x: 0.5, y: 0.5 },
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.rect(...this.arguments);
     },
@@ -164,7 +164,7 @@ const tests = [
         lineJoin: 'round',
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.path(...this.arguments);
     },
@@ -185,7 +185,7 @@ const tests = [
         lineWidth: 5,
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.path(...this.arguments);
     },
@@ -209,7 +209,7 @@ const tests = [
         lineWidth: 5,
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.path(...this.arguments);
     },
@@ -235,7 +235,7 @@ const tests = [
         lineWidth: 5,
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.path(...this.arguments);
     },
@@ -251,7 +251,7 @@ const tests = [
         lineWidth: 5,
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.circle(...this.arguments);
     },
@@ -269,7 +269,7 @@ const tests = [
         scaleLineWidth: true,
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.circle(...this.arguments);
     },
@@ -283,7 +283,7 @@ const tests = [
         scale: 0.5,
       },
     ],
-    run(canvas) {
+    run(canvas, Paint) {
       const paint = new Paint(canvas);
       paint.setViewScale(this.arguments[0].scale);
       paint.setViewOffset(
